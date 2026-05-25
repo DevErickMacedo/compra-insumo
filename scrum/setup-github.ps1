@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 # setup-github.ps1
 # Cria labels, milestones (sprints) e issues no GitHub
 # usando o GitHub CLI (gh).
@@ -80,20 +80,24 @@ Write-Host "`n=== Criando milestones (sprints) ===" -ForegroundColor Cyan
 $milestones = Get-Content $MilesFile -Raw | ConvertFrom-Json
 
 # Mapeia titulo -> numero do milestone apos criacao
-$milestoneMap = @{}
+$milestoneMap = @{
+    "Preparação REST" = 1
+    "Criação Aplicação Angular" = 2
+}
 
+<#
 foreach ($ms in $milestones) {
     $payload = @{
         title       = $ms.title
         description = $ms.description
-        due_on      = $ms.due_on
+        due_on      = ([datetime]$ms.due_on).ToString("yyyy-MM-ddTHH:mm:ssZ")
         state       = "open"
     } | ConvertTo-Json -Compress
 
     $response = $payload | gh api `
         "repos/$Repo/milestones" `
         --method POST `
-        --input - 2>&1
+        --input - 2>$null
 
     if ($LASTEXITCODE -eq 0) {
         $created = $response | ConvertFrom-Json
@@ -111,6 +115,7 @@ foreach ($ms in $milestones) {
         }
     }
 }
+#>
 
 # ============================================================
 # 3. ISSUES (Backlog)
