@@ -3,12 +3,15 @@ package feira.packages.controller;
 import feira.packages.dto.CompraInsumoRequest;
 import feira.packages.dto.CompraInsumoResponse;
 import feira.packages.service.CompraInsumoService;
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/compras") 
 public class CompraInsumoController {
@@ -26,7 +29,7 @@ public class CompraInsumoController {
     }
 
     @PostMapping
-    public ResponseEntity<CompraInsumoResponse> salvar(@RequestBody CompraInsumoRequest request) {
+    public ResponseEntity<CompraInsumoResponse> salvar(@jakarta.validation.Valid @RequestBody CompraInsumoRequest request) { @Valid
         CompraInsumoResponse response = compraInsumoService.cadastrar(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
